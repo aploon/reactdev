@@ -1,6 +1,6 @@
 function App() {
 
-  return 'Bonjour les gens !'
+  return <h1>Bonjour les gens</h1>
 
 }
 
