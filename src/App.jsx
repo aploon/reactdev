@@ -29,7 +29,7 @@ function App() {
 
     })
 
-    return <div className="Container w-25 m-auto">
+    return <div className="Container w-25 m-auto" style={{minWidth: "350px"}}>
         <SearchBar onShowStockedOnly={setShowStockedOnly} onSearch={setSearch}></SearchBar>
         <ProduitTable produits={produitVisible}></ProduitTable>
     </div>
