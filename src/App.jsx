@@ -6,7 +6,7 @@ function App() {
     let [count, setCount] = useState(0)
 
     // comportements
-    handleClick = (e) => {
+    let handleClick = (e) => {
         setCount(count + 1)
     }
 
@@ -15,7 +15,7 @@ function App() {
         <div className="container mt-2 m-auto" style={{minWith: "350px"}}>
             <h1>Compteur</h1>
             <p>{count}</p>
-            <button onClick={handleClick}>Click</button>
+            <button className="btn btn-primary" onClick={handleClick}>Click</button>
         </div>
     </>
 }
