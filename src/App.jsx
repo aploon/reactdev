@@ -1,81 +1,24 @@
-import { useState } from "react"
-import { Input } from "./components/form/Input"
-import { Checkbox } from "./components/form/Checkbox"
-import { ProduitCategorieRow } from "./components/produit/ProduitCategorieRow"
-import { ProduitRow } from "./components/produit/ProduitRow"
-
-// Tous les produits de notre app
-const PRODUCTS = [
-    { category: "Fruits", price: "$1", stocked: true, name: "Apple" },
-    { category: "Fruits", price: "$1", stocked: true, name: "Dragonfruit" },
-    { category: "Fruits", price: "$2", stocked: false, name: "Passionfruit" },
-    { category: "Vegetables", price: "$2", stocked: true, name: "Spinach" },
-    { category: "Vegetables", price: "$4", stocked: false, name: "Pumpkin" },
-    { category: "Vegetables", price: "$1", stocked: true, name: "Peas" }
-]
+import React, { useState, useEffect } from 'react';
 
 function App() {
+  const [count, setCount] = useState(0);
 
-    const [showStockedOnly, setShowStockedOnly] = useState(false)
-    const [search, setSearch] = useState('')
+  useEffect(() => {
+    // Démarre un timer qui incrémente le compteur toutes les 1000 millisecondes (1 seconde)
+    const timer = setInterval(() => {
+      setCount(prevCount => prevCount + 1);
+    }, 1000);
 
-    let produitVisible = PRODUCTS.filter((product) => {
-        
-        if(showStockedOnly) {
-            return product.stocked && product.name.toLowerCase().includes(search.toLowerCase())
-        }else{
-            return product.name.toLowerCase().includes(search.toLowerCase())
-        }
+    // Nettoie le timer lorsque le composant est démonté
+    return () => clearInterval(timer);
+  }, [count]); // Le tableau vide [] indique que cet effet ne dépend d'aucune variable d'état ou de propriété
 
-    })
-
-    return <div className="Container w-25 m-auto" style={{minWidth: "350px"}}>
-        <SearchBar onShowStockedOnly={setShowStockedOnly} onSearch={setSearch}></SearchBar>
-        <ProduitTable produits={produitVisible}></ProduitTable>
+  return (
+    <div>
+        <input type="number" onChange={e => setCount(Number(e.target.value))}/>
+        <h1>Compteur automatique : {count}</h1>
     </div>
+  );
 }
 
-
-function SearchBar({onShowStockedOnly, onSearch}) {
-
-    return <div className="mt-3">
-        <Input placeholder="Rechercher..." onChange={onSearch}></Input>
-        <Checkbox id="formCheckbox" onChange={onShowStockedOnly}></Checkbox>
-    </div>
-
-}
-
-function ProduitTable({produits}) {
-
-    let rows = []
-    let lastCategorie = ""
-
-    for (let produit of produits) {
-
-        if (produit.category != lastCategorie) {
-            rows.push(<ProduitCategorieRow key={produit.category} categorie={produit.category}></ProduitCategorieRow>)
-        }
-
-        rows.push(<ProduitRow key={produit.name} produit={produit}></ProduitRow>)
-
-        lastCategorie = produit.category
-    }
-
-    return <div>
-        <table className="table">
-            <thead>
-                <tr>
-                    <th>Nom</th>
-                    <th>Prix</th>
-                </tr>
-            </thead>
-
-            <tbody>
-                {rows}
-            </tbody>
-        </table>
-    </div>
-
-}
-
-export default App
+export default App;
