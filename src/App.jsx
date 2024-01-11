@@ -4,7 +4,7 @@ import { Checkbox } from "./components/form/Checkbox"
 import { ProduitCategorieRow } from "./components/produit/ProduitCategorieRow"
 import { ProduitRow } from "./components/produit/ProduitRow"
 
-
+// Tous les produits de notre app
 const PRODUCTS = [
     { category: "Fruits", price: "$1", stocked: true, name: "Apple" },
     { category: "Fruits", price: "$1", stocked: true, name: "Dragonfruit" },
