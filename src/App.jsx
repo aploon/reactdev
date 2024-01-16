@@ -15,27 +15,25 @@ function reducer(todos, action) {
 }
 
 function App() {
+  const [count, setCount] = useState(3)
 
-    const [todos, manageTodo] = useReducer(reducer, InitTodos)
+  let autoCount = () => {
 
-    return <>
-        <div>
-            <input type="checkbox" />
-            Afficher les tâches à accomplies
-        </div>
+    timer =  setInterval(() => {
+        setCount(v => v - 1)
+        if(count == 0){
+            clearInterval(timer) 
+        }
+    }, 1000);
+    
+  }
 
-        <ul>
-            {todos.map((todo) => {
-                return <li key={todo.name}>
-                    <input type="checkbox" />
-                    {todo.name}
-                    <button onClick={() => manageTodo({type: 'DELETE_TODO', payload: todo})}>Supprimer</button>
-                </li>
-            })}
-        </ul>
-
-        <button>Supprimer les tâches accomplies</button>
-    </>
+  return (
+    <div>
+        <input type="number" onChange={e => {setCount()}}/>
+        <h1>Compteur automatique : {count}</h1> 
+    </div>
+  );
 }
 
-export default App
+export default App;
