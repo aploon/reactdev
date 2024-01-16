@@ -1,81 +1,41 @@
-import { useState } from "react"
-import { Input } from "./components/form/Input"
-import { Checkbox } from "./components/form/Checkbox"
-import { ProduitCategorieRow } from "./components/produit/ProduitCategorieRow"
-import { ProduitRow } from "./components/produit/ProduitRow"
+import { useReducer, useState } from "react"
 
-// Tous les produits de notre app
-const PRODUCTS = [
-    { category: "Fruits", price: "$1", stocked: true, name: "Apple" },
-    { category: "Fruits", price: "$1", stocked: true, name: "Dragonfruit" },
-    { category: "Fruits", price: "$2", stocked: false, name: "Passionfruit" },
-    { category: "Vegetables", price: "$2", stocked: true, name: "Spinach" },
-    { category: "Vegetables", price: "$4", stocked: false, name: "Pumpkin" },
-    { category: "Vegetables", price: "$1", stocked: true, name: "Peas" }
+const InitTodos = [
+    {name: "Faire les courses", completed: false},
+    {name: "Ranger les courses", completed: false},
+    {name: "Manger les courses", completed: false}
 ]
+
+function reducer(todos, action) {
+    if(action.type === 'DELETE_TODO') {
+        return todos.filter((todo) => todo.name !== action.payload.name)
+    }else {
+        return todos
+    }
+}
 
 function App() {
 
-    const [showStockedOnly, setShowStockedOnly] = useState(false)
-    const [search, setSearch] = useState('')
+    const [todos, manageTodo] = useReducer(reducer, InitTodos)
 
-    let produitVisible = PRODUCTS.filter((product) => {
-        
-        if(showStockedOnly) {
-            return product.stocked && product.name.toLowerCase().includes(search.toLowerCase())
-        }else{
-            return product.name.toLowerCase().includes(search.toLowerCase())
-        }
+    return <>
+        <div>
+            <input type="checkbox" />
+            Afficher les tâches à accomplies
+        </div>
 
-    })
+        <ul>
+            {todos.map((todo) => {
+                return <li key={todo.name}>
+                    <input type="checkbox" />
+                    {todo.name}
+                    <button onClick={() => manageTodo({type: 'DELETE_TODO', payload: todo})}>Supprimer</button>
+                </li>
+            })}
+        </ul>
 
-    return <div className="Container w-25 m-auto" style={{minWidth: "350px"}}>
-        <SearchBar onShowStockedOnly={setShowStockedOnly} onSearch={setSearch}></SearchBar>
-        <ProduitTable produits={produitVisible}></ProduitTable>
-    </div>
-}
-
-
-function SearchBar({onShowStockedOnly, onSearch}) {
-
-    return <div className="mt-3">
-        <Input placeholder="Rechercher..." onChange={onSearch}></Input>
-        <Checkbox id="formCheckbox" onChange={onShowStockedOnly}></Checkbox>
-    </div>
-
-}
-
-function ProduitTable({produits}) {
-
-    let rows = []
-    let lastCategorie = ""
-
-    for (let produit of produits) {
-
-        if (produit.category != lastCategorie) {
-            rows.push(<ProduitCategorieRow key={produit.category} categorie={produit.category}></ProduitCategorieRow>)
-        }
-
-        rows.push(<ProduitRow key={produit.name} produit={produit}></ProduitRow>)
-
-        lastCategorie = produit.category
-    }
-
-    return <div>
-        <table className="table">
-            <thead>
-                <tr>
-                    <th>Nom</th>
-                    <th>Prix</th>
-                </tr>
-            </thead>
-
-            <tbody>
-                {rows}
-            </tbody>
-        </table>
-    </div>
-
+        <button>Supprimer les tâches accomplies</button>
+    </>
 }
 
 export default App
